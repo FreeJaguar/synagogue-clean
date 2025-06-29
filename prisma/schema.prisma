@@ -1,0 +1,109 @@
+// This is your Prisma schema file,
+// learn more about it in the docs: https://pris.ly/d/prisma-schema
+
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "postgresql"
+  url      = env("DATABASE_URL")
+}
+
+model User {
+  id        String   @id @default(cuid())
+  username  String   @unique
+  password  String
+  role      String   @default("gabbai")
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+
+  @@map("users")
+}
+
+model Lesson {
+  id          String   @id @default(cuid())
+  title       String
+  time        String
+  rabbi       String
+  date        DateTime
+  recurring   Boolean  @default(false)
+  description String?
+  imageUrl    String?
+  createdAt   DateTime @default(now())
+  updatedAt   DateTime @updatedAt
+
+  @@map("lessons")
+}
+
+model Memorial {
+  id        String   @id @default(cuid())
+  name      String
+  years     Int
+  date      DateTime
+  imageUrl  String?
+  note      String?
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+
+  @@map("memorials")
+}
+
+model TorahWord {
+  id        String   @id @default(cuid())
+  content   String
+  author    String
+  date      DateTime
+  imageUrl  String?
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+
+  @@map("torah_words")
+}
+
+model ShabbatTimes {
+  id             String   @id @default(cuid())
+  candleLighting String
+  shabbatEnds    String
+  parsha         String
+  date           DateTime @unique
+  createdAt      DateTime @default(now())
+  updatedAt      DateTime @updatedAt
+
+  @@map("shabbat_times")
+}
+
+model PrayerTimes {
+  id        String   @id @default(cuid())
+  shacharit String
+  mincha    String
+  mariv     String
+  date      DateTime @unique
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+
+  @@map("prayer_times")
+}
+
+model Announcement {
+  id        String   @id @default(cuid())
+  title     String
+  content   String
+  imageUrl  String?
+  priority  Int      @default(1) // 1=נמוך, 2=רגיל, 3=גבוה
+  active    Boolean  @default(true)
+  startDate DateTime
+  endDate   DateTime?
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+
+  @@map("announcements")
+}
+
+model Setting {
+  id    String @id @default(cuid())
+  key   String @unique
+  value String
+
+  @@map("settings")
+}
